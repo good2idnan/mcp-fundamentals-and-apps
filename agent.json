@@ -1,0 +1,13 @@
+{
+    "name": "weather-agent",
+    "description": "Agent that handles weather queries using my local MCP server",
+    "model": "Qwen/Qwen2.5-72B-Instruct",
+
+    "servers": [
+        {
+            "type": "stdio",
+            "command": "c:/xampp/htdocs/MCP/.venv/Scripts/python.exe",
+            "args": ["c:/xampp/htdocs/MCP/server.py"]
+        }
+    ]
+}

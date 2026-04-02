@@ -1,0 +1,10 @@
+[project]
+name = "mcp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "huggingface_hub[mcp]>=0.32.0",
+    "mcp[cli]"
+]
