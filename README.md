@@ -1,27 +1,27 @@
-# 🚀 MCP Fundamentals and Apps
+# 🚀 Atlas: Agentic MCP Workspace Assistant
 
-A professional exploration of the **Model Context Protocol (MCP)**, demonstrating how to bridge the gap between large language models and local/external tools. This repository serves as a portfolio piece showing both core MCP primitives and practical, UI-driven implementations.
+Atlas is a professional-grade Model Context Protocol (MCP) ecosystem designed for workspace management and system orchestration. It features a reactive **Gradio Dashboard** and a high-performance **MCP Server** that bridges the gap between human users and AI agents.
 
 ---
 
 ## 🌟 Key Features
 
-### 🖥️ 1. Weather Dashboard (`gradio_weather.py`)
-A real-time weather application powered by **Gradio** and **Open-Meteo**.
-- **Agentic Integration**: Launches as an MCP server with a built-in tool that an LLM can use to fetch weather for any city globally.
-- **Interactive UI**: A full web interface to visualize results while the agent works behind the scenes.
+### 🖥️ 1. Atlas Dashboard (`app.py`)
+A modern, reactive multi-tab interface:
+- **🤖 Smart Assistant**: Chat with an LLM that is directly connected to Atlas's local tools.
+- **📁 Workspace Explorer**: Live view of your project files with real-time status.
+- **📈 System Monitor**: Real-time gauges for CPU and Memory usage using `psutil`.
+- **📝 Persistent Notes**: A structured system to save and retrieve markdown notes.
 
-### 🏛️ 2. MCP Core Primitives (`server.py`)
-A pure FastMCP implementation that demonstrates the three fundamental pillars of the protocol:
-- **🛠️ Tools**: Callable functions like `get_weather` for direct agent interaction.
-- **📚 Resources**: Exposing weather data via a URI scheme (`weather://{location}`) for context retrieval.
-- **💡 Prompts**: Templated instructions (`weather_prompt`) to guide the LLM's personality and output style.
-
-### 🧮 3. Simple Math Lab (`simple_mcp/`)
-A "Hello World" style implementation for learning MCP basics:
-- Basic math tools (`add`, `multiply`).
-- Dynamic echoing resources.
-- Clear, beginner-friendly codebase.
+### 🏛️ 2. Atlas MCP Server (`atlas_server.py`)
+A comprehensive server that exposes your workspace to local agents (like Claude Desktop):
+- **🛠️ Tools**: 
+    - `get_weather`: Professional real-time weather integration.
+    - `add_note` / `list_notes`: File-system backed persistent storage.
+    - `list_files` / `read_workspace_file`: Secure-path-constrained file operations.
+- **📚 Resources**: 
+    - `system://metrics`: JSON-ready system stats.
+    - `notes://{title}`: Dynamic URI scheme for note retrieval.
 
 ---
 
@@ -29,11 +29,12 @@ A "Hello World" style implementation for learning MCP basics:
 
 ```mermaid
 graph TD
-    A[LLM Agent e.g. Claude Desktop] -->|MCP Protocol| B[MCP Server]
-    B -->|Tools| C[Weather API / Local OS]
-    B -->|Resources| D[Notes / System Data]
-    B -->|Prompts| E[Expert Context]
-    F[Human User] -->|Gradio UI| B
+    User[Human User] -->|Interacts| UI[Gradio Dashboard]
+    UI -->|Calls| Server[Atlas MCP Server]
+    Agent[Claude/GPT-4o] -->|Connects via stdio| Server
+    Server -->|Actions| Files[Local Filesystem]
+    Server -->|Monitoring| Sys[System Metrics]
+    Server -->|External| Weather[Open-Meteo API]
 ```
 
 ---
@@ -42,41 +43,23 @@ graph TD
 
 ### 1. Prerequisites
 - Python 3.10+
-- [uv](https://github.com/astral-sh/uv) (Recommended) or `pip`
+- Dependencies: `pip install mcp psutil gradio httpx`
 
-### 2. Installation
+### 2. Run the Dashboard
 ```bash
-# Clone the repository
-git clone https://github.com/good2idnan/mcp-fundamentals-and-apps.git
-cd mcp-fundamentals-and-apps
-
-# Install dependencies
-pip install -r requirements.txt
-# OR if using uv
-uv sync
+python app.py
 ```
+This will launch a local server (usually at `http://localhost:7860`).
 
-### 3. Running the Apps
-- **Launch the Weather Dashboard**:
-  ```bash
-  python gradio_weather.py
-  ```
-- **Test with MCP Inspector**:
-  ```bash
-  mcp dev server.py
-  ```
-
----
-
-## 🔌 Connecting to Claude Desktop
-Add the following to your `claude_desktop_config.json`:
+### 3. Connect as an MCP Server
+To use these tools inside **Claude Desktop**, add this to your config:
 
 ```json
 {
   "mcpServers": {
-    "weather-agent": {
+    "atlas-assistant": {
       "command": "python",
-      "args": ["/absolute/path/to/server.py"]
+      "args": ["/absolute/path/to/atlas_server.py"]
     }
   }
 }
@@ -84,12 +67,13 @@ Add the following to your `claude_desktop_config.json`:
 
 ---
 
-## 🛣️ Roadmap
-- [ ] **Atlas Cockpit**: A unified dashboard for system management.
-- [ ] **Secure File Explorer**: Advanced MCP tools for local file searching.
-- [ ] **Database Integration**: Persisting agent memory via local SQLite.
+## 🏛️ Project Structure
+- `app.py`: The reactive frontend.
+- `atlas_server.py`: Core MCP logic & tools.
+- `.notes/`: Directory for persistent workspace data.
+- `simple_mcp/`: Original fundamentals lab.
 
 ---
 
 ## ⚖️ License
-MIT License. Feel free to use and adapt these patterns for your own MCP projects!
+MIT License. Created by [good2idnan](https://github.com/good2idnan).
